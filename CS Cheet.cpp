@@ -16,17 +16,19 @@ DWORD engineBase;                                   // для работы с en
 std::atomic<bool> isWorkWH(false);                  // Флаг работы WH
 
 
+// Получение базового адреса модуля dll
 DWORD GetModuleBaseAddress(DWORD pid, const wchar_t* moduleName) {
-    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
+    // Создаём снимок процесса
+    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);    
     if (snapshot == INVALID_HANDLE_VALUE) {
         std::cerr << "\n\n\n--------------------ERROR--------------------\n";
         std::cerr << "snapshot == INVALID_HANDLE_VALUE method:GetModuleBaseAddress\n";
         return 0;
     }
 
-    MODULEENTRY32W mEntry;
+    MODULEENTRY32W mEntry;                            // Структура для хранения информации о процессе
     mEntry.dwSize = sizeof(mEntry);
-    if (Module32FirstW(snapshot, &mEntry)) {
+    if (Module32FirstW(snapshot, &mEntry)) {          // Получаем информацию о первом процессе
         do {
             if (!_wcsicmp(mEntry.szModule, moduleName)) {
                 CloseHandle(snapshot);
@@ -40,6 +42,7 @@ DWORD GetModuleBaseAddress(DWORD pid, const wchar_t* moduleName) {
     return 0;
 }
 
+// Читаем данные из памяти
 template <typename T>
 T readMem(DWORD address)
 {
@@ -49,6 +52,7 @@ T readMem(DWORD address)
     return buffer;
 }
 
+// Записываем данные в память
 template <typename T>
 void writeMem(DWORD address, T value)
 {
@@ -56,6 +60,7 @@ void writeMem(DWORD address, T value)
         std::cerr << "WriteProcessMemory error; address: " << std::hex << address << ", Error: " << GetLastError() << "\n";
 }
 
+// Функция чита
 void wallhack()
 {
     while (true) // создаем бесконечный цикл
@@ -63,8 +68,6 @@ void wallhack()
         Sleep(10); // таймаут 10 мс, чтобы не грузить процессор под 100
         if (!isWorkWH)
             continue;
-        //if (!wallhack && !readMem<DWORD>(readMem<DWORD>(clientBase + dwLocalPlayer) + 0xED)) // если вх выключено или не удается прочитать память - выходим из цикла
-        //    continue;
 
         DWORD glowObj = readMem<DWORD>(clientBase + dwGlowObjectManager);                               // адрес объекта glowObj
         DWORD myTeam = readMem<DWORD>(readMem<DWORD>(clientBase + dwLocalPlayer) + m_iTeamNum);         // адрес команды локального игрока
