@@ -1,5 +1,8 @@
 GS:GO WallHack (GlowHack) in last version game
 
+
+To identify the game, you need to change its name in the FindWindowA function call. My game name was "Counter-Strike: Global Offensive - Direct3D 9", but yours may be different. Alternatively, if the game is not found, you can manually enter the process pid.
+
 Since CS:GO is no longer being updated, the offsets will no longer change, but just in case, I will leave a link to a video on how to find the current offsets: https://www.youtube.com/watch?v=3OTpgzx4Anc
 
 Useful links and articles for understanding:
