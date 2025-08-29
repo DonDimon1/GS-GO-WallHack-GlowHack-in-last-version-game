@@ -1,5 +1,6 @@
-GS:GO WallHack (GlowHack) in last version game
+Disclaimer: This material is provided for educational purposes only. The author is not responsible for any misuse of the information provided.
 
+GS:GO WallHack (GlowHack) in last version game
 
 To identify the game, you need to change its name in the FindWindowA function call. My game name was "Counter-Strike: Global Offensive - Direct3D 9", but yours may be different. Alternatively, if the game is not found, you can manually enter the process pid.
 
